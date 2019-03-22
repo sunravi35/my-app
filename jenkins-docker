@@ -23,7 +23,7 @@ node{
     sh'docker push devendranathashok/cicd.1.0 '
   }
     stage('Run container on Dev server'){
-     def dockerRun = 'sudo docker run -p 8080:8080 -d --name cicd.1.0 devendranathashok/cicd.1.0'
+     def dockerRun = ' docker run -p 8090:8090 -d --name cicd.1.0 devendranathashok/cicd.1.0'
      sshagent(['testserver']) {
     sh "ssh -o StrictHostKeyChecking=no ec2-user@3.18.221.50 ${dockerRun}"
     
