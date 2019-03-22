@@ -1,0 +1,13 @@
+node{
+      stage("Checkout"){
+               git(credentialsId: 'gitcreds', url: 'https://github.com/Devendranathashok/my-app.git')}
+      stage("maven package"){
+
+   def mvnHome = tool name: 'maven3.6', type: 'maven'
+
+   def mvnCMD = "${mvnHome}/bin/mvn"
+
+   sh "${mvnCMD} clean package"
+
+   }
+}
