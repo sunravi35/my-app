@@ -3,22 +3,31 @@ node{
                git(credentialsId: 'gitcreds', url: 'https://github.com/Devendranathashok/my-app.git')}
       stage("maven package"){
 
-   def mvnHome = tool name: 'maven3.6', type: 'maven'
+   		def mvnHome = tool name: 'maven3.6', type: 'maven'
 
-   def mvnCMD = "${mvnHome}/bin/mvn"
+   		def mvnCMD = "${mvnHome}/bin/mvn"
 
-   sh "${mvnCMD} clean package"
+   		sh "${mvnCMD} clean package"
 
    }
-   stage("Docker Build") {
-     sh'docker build -t devendranathashok/cicd.1.0 .'
+     stage("Docker Build") {
+     	 sh'docker build -t devendranathashok/cicd.1.0 .'
 }
-   stage("Push Image"){
-    withCredentials([usernamePassword(credentialsId: 'dockercreds', passwordVariable: 'DockerPassword', usernameVariable: 'DockerUsername')]) 
+    stage("Push Image"){
+
+    	withCredentials([usernamePassword(credentialsId: 'dockercreds', passwordVariable: 'DockerPassword', usernameVariable: 'DockerUsername')]) 
 {
-  sh'docker login -u devendranathashok -p ${DockerPassword} '
+    sh'docker login -u devendranathashok -p ${DockerPassword} '
    
 }
- sh'docker push devendranathashok/cicd.1.0 '
+    sh'docker push devendranathashok/cicd.1.0 '
   }
+    stage('Run container on Dev server'){
+     def dockerRun = 'docker run -p 8080:8080 -d --name cicd.1.0 devendranathashok/cicd.1.0'
+     sshagent(['testserver']) {
+    sh "ssh -o StrictHostKeyChecking=no ec2-user@3.18.221.50 ${dockerRun}"
+    
+}
+      
+}
 }
