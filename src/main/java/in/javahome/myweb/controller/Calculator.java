@@ -3,5 +3,15 @@ package in.javahome.myweb.controller;
  * 
  */
 public class Calculator {
-	System.out.println("Yet to define functions"); 
+	/*
+	 * @param i
+	 * @param j
+	 * @return int
+	 */
+	public int add(int i, int j){
+		return i+j;
+	}
+	public int multiply(int i, int j){
+		return i*j;
+	}
 }
