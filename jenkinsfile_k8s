@@ -8,8 +8,19 @@ node{
 		sh 'mv target/myweb*.war target/myweb.war'
    }
 
-	stage('Email'){
+	/*stage('Email'){
     mail bcc: '', body: 'Hello World', cc: '', from: '', replyTo: '', subject: 'Pipeline Notification', to: 'reachashok9538053428@gmail.com'
-    }
+    }*/
+    stage('Docker build')
+	{
+	sh 'docker build -t dockerrepo-practice/myweb:1.0.0 .'
+	}
+	stage('Docker push')
+	{
+	  sh "docker login http://192.168.58.135:8081/repository/dockerrepo-practice/ -u admin -p admin123"
+      sh "docker push dockerrepo-practice/myweb:1.0.0"
+	  }
+	
+}
 	
 }
