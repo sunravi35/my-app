@@ -9,7 +9,7 @@ node{
    }
 
 	stage('Email'){
-    mail bcc: '', body: '''Hello World''', cc: '', from: 'reachashok9538053428a@gmail.com', replyTo: 'reachashok9538053428a@gmail.com', subject: 'Pipeline Demo', to: 'reachashok9538053428a@gmail.com'
+    mail bcc: '', body: 'Hello World', cc: '', from: '', replyTo: '', subject: 'Pipeline Notification', to: 'reachashok9538053428@gmail.com'
     }
 	
 }
