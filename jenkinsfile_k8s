@@ -13,12 +13,12 @@ node{
     }*/
     stage('Docker build')
 	{
-	sh 'docker build -t 192.168.58.135:8082/myweb:1.0.0 .'
+	sh 'docker build -t 192.168.58.135:8083/myweb:1.0.0 .'
 	}
 	stage('Docker push')
 	{
 	  sh "docker login http://192.168.58.135:8082 -u admin -p admin123"
-          sh "docker push 192.168.58.135:8082/myweb:1.0.0"
+          sh "docker push 192.168.58.135:8083/myweb:1.0.0"
 	  }
 	
 }
