@@ -22,7 +22,8 @@ node{
 	  }
 	stage('Deploy to Kubernetes'){
 		sshagent(['kubernetescreds']) {
-		sh "scp -o StrictHostKeyChecking=no deployments.yml vagrant@192.168.58.120:/home/vagrant/"
+		//sh "ssh -o StrictHostKeyChecking=no deployments.yml vagrant@192.168.58.120:/home/vagrant/"
+		sh "ssh vagrant@192.168.58.120 ls -lart"
    
 	}
 	}
