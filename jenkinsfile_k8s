@@ -20,6 +20,12 @@ node{
 	  sh "docker login http://192.168.58.135:8083 -u admin -p admin123"
           sh "docker push 192.168.58.135:8083/myweb:1.0.0"
 	  }
+	stage('Deploy to Kubernetes'){
+		sshagent(['kubernetescreds']) {
+		sh "scp -o StrictHostKeyChecking=no deployments.yml vagrant@192.168.58.120:/home/vagrant/"
+   
+	}
+	}
 	
 }
 	
