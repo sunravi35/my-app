@@ -1,5 +1,5 @@
 ---
- apiVersion: extensions/v1beta1
+ apiVersion: apps/v1
  kind: Deployment
  metadata:
    name: myweb
@@ -11,11 +11,7 @@
          app: myweb
      spec:
        containers:
-         - name: front-end
-           image: nginx
-           ports:
-             - containerPort: 80
          - name: myweb
            image: 192.168.58.135:8083/myweb:1.0.0
            ports:
-             - containerPort: 88
+             - containerPort: 8080
