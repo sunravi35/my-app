@@ -27,6 +27,7 @@ node{
           sh "docker push 192.168.58.135:8083/myweb:1.0.0"
 	  }
 	  try{
+	 deploymentStarted()
 	stage('Deploy to Kubernetes'){
 		sshagent(['kubernetescreds']) {
 		sh "scp -o StrictHostKeyChecking=no deployment.yaml vagrant@192.168.58.120:/home/vagrant/"
@@ -35,10 +36,11 @@ node{
 	   }catch(ex){
 	     sh "ssh vagrant@192.168.58.120 kubectl apply -f /home/vagrant/deployment.yaml"
 	   }
-	   notifySuccessful()
+	   deploymentSuccessful()
 	   }catch (e) {
 	   currentBuild.result = "FAILED"
-	   notifyFailed()
+	   deploymentFailed()
+	   throw e
 	   }
    
 	}
@@ -73,6 +75,34 @@ def notifyFailed() {
     
 Check console output at "${env.JOB_NAME} [${env.BUILD_NUMBER}]"
 
+""",, recipientProviders: [developers()], subject: '"FAILED: Job \'${env.JOB_NAME} [${env.BUILD_NUMBER}]\'",', 
+to: 'reachashok9538053428@gmail.com')
+}
+	def deploymentStarted() { emailext (
+	body: """
+STARTED: Job \'${env.JOB_NAME} [${env.BUILD_NUMBER}]\':
+Check console output at "${env.JOB_NAME} [${env.BUILD_NUMBER}]"
+Deployment has been started on kubernetes
+""", recipientProviders: [developers()], subject: 'subject: "STARTED: Job \'${env.JOB_NAME} [${env.BUILD_NUMBER}]\'",', 
+to: 'reachashok9538053428@gmail.com' )}
+
+def deploymentSuccessful() { 
+ emailext(
+ body: """
+SUCCESSFUL: Job \'${env.JOB_NAME} [${env.BUILD_NUMBER}]\':       
+Check console output at "${env.JOB_NAME} [${env.BUILD_NUMBER}]"
+Deployment has been successfully completed
+""", recipientProviders: [developers()], subject: '"SUCCESSFUL: Job \'${env.JOB_NAME} [${env.BUILD_NUMBER}]\'"',
+to: 'reachashok9538053428@gmail.com')
+} 
+
+def deploymentFailed() {
+	emailext (
+	body:  """
+	  FAILED: Job \'${env.JOB_NAME} [${env.BUILD_NUMBER}]\':
+    
+Check console output at "${env.JOB_NAME} [${env.BUILD_NUMBER}]"
+Deployment has been failed
 """,, recipientProviders: [developers()], subject: '"FAILED: Job \'${env.JOB_NAME} [${env.BUILD_NUMBER}]\'",', 
 to: 'reachashok9538053428@gmail.com')
 }
