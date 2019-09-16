@@ -17,7 +17,7 @@ node{
     notifyFailed()
     throw e
   }
-}
+
 
 def notifyStarted() { emailext (
       subject: "STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
@@ -77,6 +77,7 @@ Check console output at "${env.JOB_NAME} [${env.BUILD_NUMBER}]"
 	     sh "ssh vagrant@192.168.58.120 kubectl apply -f /home/vagrant/deployment.yaml"
 	   }
    
+	}
 	}
 	}
 	
