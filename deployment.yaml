@@ -1,17 +1,21 @@
----
- apiVersion: apps/v1
- kind: Deployment
- metadata:
-   name: myweb
- spec:
-   replicas: 2
-   template:
-     metadata:
-       labels:
-         app: myweb
-     spec:
-       containers:
-         - name: myweb
-           image: 192.168.58.135:8083/myweb:1.0.0
-           ports:
-             - containerPort: 8080
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mywebdeployment
+  labels:
+    app: myweb
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: myweb
+  template:
+    metadata:
+      labels:
+        app: myweb
+    spec:
+      containers:
+      - name: myweb
+        image: 192.168.58.135:8083/myweb:1.0.0
+        ports:
+        - containerPort: 8080
