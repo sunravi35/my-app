@@ -42,44 +42,38 @@ node{
 	}
 	}
 	def notifyStarted() { emailext (
-      subject: "STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-      body: """
-STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':
+	body: """
+STARTED: Job \'${env.JOB_NAME} [${env.BUILD_NUMBER}]\':
 
 Check console output at "${env.JOB_NAME} [${env.BUILD_NUMBER}]"
 
-""",
-      recipientProviders: [[$class: 'DevelopersRecipientProvider']]
-    ) }
+""", recipientProviders: [developers()], subject: 'subject: "STARTED: Job \'${env.JOB_NAME} [${env.BUILD_NUMBER}]\'",', 
+to: 'reachashok9538053428@gmail.com' )}
 
 def notifySuccessful() { 
-  emailext (
-      subject: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-      body: """
-SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':
+ emailext(
+ body: """
+SUCCESSFUL: Job \'${env.JOB_NAME} [${env.BUILD_NUMBER}]\':
 
 
         
 Check console output at "${env.JOB_NAME} [${env.BUILD_NUMBER}]"
 
-""",
-      recipientProviders: [[$class: 'DevelopersRecipientProvider']]
-    )
+""", recipientProviders: [developers()], subject: '"SUCCESSFUL: Job \'${env.JOB_NAME} [${env.BUILD_NUMBER}]\'"',
+to: 'reachashok9538053428@gmail.com')
 } 
 
 def notifyFailed() {
 	emailext (
-      subject: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-      body: """
-	  FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':
+	body:  """
+	  FAILED: Job \'${env.JOB_NAME} [${env.BUILD_NUMBER}]\':
 
 
         
 Check console output at "${env.JOB_NAME} [${env.BUILD_NUMBER}]"
 
-""",
-      recipientProviders: [[$class: 'DevelopersRecipientProvider']]
-    )
+""",, recipientProviders: [developers()], subject: '"FAILED: Job \'${env.JOB_NAME} [${env.BUILD_NUMBER}]\'",', 
+to: 'reachashok9538053428@gmail.com')
 }
 	
 
