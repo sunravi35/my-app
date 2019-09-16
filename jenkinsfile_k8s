@@ -2,15 +2,63 @@ node{
     stage("SCM Checkout"){
 	git credentialsId: 'gitcreds', url: 'https://github.com/Devendranathashok/my-app.git'
 	}
-	 stage('Maven Build'){
+	try {
+    notifyStarted()
+
+   stage('Maven Build'){
         def mvnHome = tool name: 'maven3', type: 'maven'
 		sh "${mvnHome}/bin/mvn clean package"
 		sh 'mv target/myweb*.war target/myweb.war'
    }
 
-	stage('post build notify'){
-    mail bcc: '', body: 'Hello World', cc: '', from: '', replyTo: '', subject: 'Pipeline Notification', to: 'reachashok9538053428@gmail.com'
-    }
+    notifySuccessful()
+  } catch (e) {
+    currentBuild.result = "FAILED"
+    notifyFailed()
+    throw e
+  }
+}
+
+def notifyStarted() { emailext (
+      subject: "STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+      body: """
+STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':
+
+Check console output at "${env.JOB_NAME} [${env.BUILD_NUMBER}]"
+
+""",
+      recipientProviders: [[$class: 'DevelopersRecipientProvider']]
+    ) }
+
+def notifySuccessful() { 
+  emailext (
+      subject: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+      body: """
+SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':
+
+
+        
+Check console output at "${env.JOB_NAME} [${env.BUILD_NUMBER}]"
+
+""",
+      recipientProviders: [[$class: 'DevelopersRecipientProvider']]
+    )
+} 
+
+def notifyFailed() {
+	emailext (
+      subject: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+      body: """
+	  FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':
+
+
+        
+Check console output at "${env.JOB_NAME} [${env.BUILD_NUMBER}]"
+
+""",
+      recipientProviders: [[$class: 'DevelopersRecipientProvider']]
+    )
+}
     stage('Docker build')
 	{
 	sh 'docker build -t 192.168.58.135:8083/myweb:1.0.0 .'
@@ -30,9 +78,7 @@ node{
 	   }
    
 	}
-	}stage('Post deployment notify'){
-    mail bcc: '', body: 'Hello World', cc: '', from: '', replyTo: '', subject: 'Pipeline Notification', to: 'reachashok9538053428@gmail.com'
-    }
+	}
 	
 }
 	
