@@ -8,9 +8,9 @@ node{
 		sh 'mv target/myweb*.war target/myweb.war'
    }
 
-	/*stage('Email'){
+	stage('post build notify'){
     mail bcc: '', body: 'Hello World', cc: '', from: '', replyTo: '', subject: 'Pipeline Notification', to: 'reachashok9538053428@gmail.com'
-    }*/
+    }
     stage('Docker build')
 	{
 	sh 'docker build -t 192.168.58.135:8083/myweb:1.0.0 .'
@@ -30,7 +30,9 @@ node{
 	   }
    
 	}
-	}
+	}stage('Post deployment notify'){
+    mail bcc: '', body: 'Hello World', cc: '', from: '', replyTo: '', subject: 'Pipeline Notification', to: 'reachashok9538053428@gmail.com'
+    }
 	
 }
 	
