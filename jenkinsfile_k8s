@@ -19,7 +19,29 @@ node{
   }
 
 
-def notifyStarted() { emailext (
+
+    stage('Docker build')
+	{
+	sh 'docker build -t 192.168.58.135:8083/myweb:1.0.0 .'
+	}
+	stage('Docker push')
+	{
+	  sh "docker login http://192.168.58.135:8083 -u admin -p admin123"
+          sh "docker push 192.168.58.135:8083/myweb:1.0.0"
+	  }
+	stage('Deploy to Kubernetes'){
+		sshagent(['kubernetescreds']) {
+		sh "scp -o StrictHostKeyChecking=no deployment.yaml vagrant@192.168.58.120:/home/vagrant/"
+		try{
+	     sh "ssh vagrant@192.168.58.120 kubectl create -f /home/vagrant/deployment.yaml"
+	   }catch(ex){
+	     sh "ssh vagrant@192.168.58.120 kubectl apply -f /home/vagrant/deployment.yaml"
+	   }
+   
+	}
+	}
+	}
+	def notifyStarted() { emailext (
       subject: "STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
       body: """
 STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':
@@ -59,27 +81,6 @@ Check console output at "${env.JOB_NAME} [${env.BUILD_NUMBER}]"
       recipientProviders: [[$class: 'DevelopersRecipientProvider']]
     )
 }
-    stage('Docker build')
-	{
-	sh 'docker build -t 192.168.58.135:8083/myweb:1.0.0 .'
-	}
-	stage('Docker push')
-	{
-	  sh "docker login http://192.168.58.135:8083 -u admin -p admin123"
-          sh "docker push 192.168.58.135:8083/myweb:1.0.0"
-	  }
-	stage('Deploy to Kubernetes'){
-		sshagent(['kubernetescreds']) {
-		sh "scp -o StrictHostKeyChecking=no deployment.yaml vagrant@192.168.58.120:/home/vagrant/"
-		try{
-	     sh "ssh vagrant@192.168.58.120 kubectl create -f /home/vagrant/deployment.yaml"
-	   }catch(ex){
-	     sh "ssh vagrant@192.168.58.120 kubectl apply -f /home/vagrant/deployment.yaml"
-	   }
-   
-	}
-	}
-	}
 	
 
 	
