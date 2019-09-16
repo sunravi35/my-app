@@ -37,13 +37,13 @@ node{
 	     sh "ssh vagrant@192.168.58.120 kubectl apply -f /home/vagrant/deployment.yaml"
 	   }
 	   deploymentSuccessful()
+	   }
 	   }catch (e) {
 	   currentBuild.result = "FAILED"
 	   deploymentFailed()
 	   throw e
 	   }
    
-	}
 	}
 	}
 	def notifyStarted() { emailext (
