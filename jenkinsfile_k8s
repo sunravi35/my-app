@@ -16,7 +16,13 @@ node{
     currentBuild.result = "FAILED"
     notifyFailed()
     throw e
-  }
+  }  
+  stage('SonarQube Analysis') {
+        def mvnHome =  tool name: 'maven3', type: 'maven'
+        withSonarQubeEnv('sonar-6') { 
+          sh "${mvnHome}/bin/mvn sonar:sonar"
+        }
+    }
     stage('Docker build')
 	{
 	sh 'docker build -t 192.168.58.135:8083/myweb:1.0.0 .'
