@@ -14,7 +14,15 @@
 			<artifactId>javax.servlet-api</artifactId>
 			<version>3.0.1</version>
 			<scope>provided</scope>
-		</dependency>
+		</dependency>	
+	<!-- https://mvnrepository.com/artifact/org.codehaus.mojo/sonar-maven-plugin -->
+            <dependency>
+    		<groupId>org.codehaus.mojo</groupId>
+    		<artifactId>sonar-maven-plugin</artifactId>
+    		<version>3.6.0.1398</version>
+    		<type>pom</type>
+	   </dependency>
+
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
