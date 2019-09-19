@@ -32,6 +32,9 @@
 		</dependency>
 	
 	</dependencies>
+<properties>
+    <sonar.host.url>http://192.168.58.140:4000</sonar.host.url>
+</properties>
 	
 <build>
     <plugins>
@@ -49,11 +52,12 @@
             <artifactId>maven-surefire-plugin</artifactId>
             <version>2.19</version>
         </plugin>
-	  <plugin>
-          <groupId>org.sonarsource.scanner.maven</groupId>
-          <artifactId>sonar-maven-plugin</artifactId>
-          <version>3.0</version>
-        </plugin>
+	
+      <plugin>
+        <groupId>org.sonarsource.scanner.maven</groupId>
+        <artifactId>sonar-maven-plugin</artifactId>
+        <version>3.6.0.1398</version>
+      </plugin>
     </plugins>
 </build>
 	
